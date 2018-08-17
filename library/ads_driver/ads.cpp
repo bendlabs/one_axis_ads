@@ -113,7 +113,7 @@ int ads_select_device(uint8_t device)
  */
 int ads_init(ads_init_t * ads_init)
 {
-	ads_hal_init(&ads_parse_read_buffer);	
+	ads_hal_init(&ads_parse_read_buffer, ads_init->reset_pin, ads_init->datardy_pin);	
 	
 	ads_data_callback = ads_init->ads_sample_callback;
 	

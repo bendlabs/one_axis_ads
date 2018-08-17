@@ -4,7 +4,8 @@
 #include <bluefruit.h>
 #include <string.h>
 
-
+#define ADS_RESET_PIN       (27)        // Pin number attached to ads reset line.
+#define ADS_INTERRUPT_PIN   (30)        // Pin number attached to the ads data ready line.  
 
 
 BLEService        angms = BLEService(0x1820);
@@ -118,11 +119,13 @@ void setup() {
 
   init.sps = ADS_100_HZ;
   init.ads_sample_callback = &ads_data_callback;
+  init.reset_pin = ADS_RESET_PIN;                 // Pin connected to ADS reset line
+  init.datardy_pin = ADS_INTERRUPT_PIN;           // Pin connected to ADS data ready interrupt
 
   delay(100);
 
-  if(ads_init(&init) == ADS_ERR_TIMEOUT)
-    Serial.println("Update failed");
+  if(ads_init(&init) != ADS_OK)
+    Serial.println("One Axis ADS initialization failed");
 
   delay(100);
 }

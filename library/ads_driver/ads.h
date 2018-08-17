@@ -39,6 +39,8 @@ typedef enum {
 typedef struct {
 	ADS_SPS_T sps;
 	ads_callback ads_sample_callback;
+	uint32_t reset_pin;
+	uint32_t datardy_pin;
 } ads_init_t;
 
 

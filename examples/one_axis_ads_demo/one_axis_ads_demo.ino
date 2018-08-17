@@ -3,8 +3,11 @@
   #define Serial SERIAL_PORT_USBVIRTUAL
 #endif
 
+#include "Arduino.h"
 #include "ads.h"
 
+#define ADS_RESET_PIN      (4)          // Pin number attached to ads reset line.
+#define ADS_INTERRUPT_PIN   (3)         // Pin number attached to the ads data ready line. 
 
 void ads_data_callback(float sample);
 float deadzone_filter(float sample);
@@ -65,17 +68,14 @@ void setup() {
 
   init.sps = ADS_100_HZ;                          // Set sample rate to 100 Hz
   init.ads_sample_callback = &ads_data_callback;  // Provide callback for new data
+  init.reset_pin = ADS_RESET_PIN;                 // Pin connected to ADS reset line
+  init.datardy_pin = ADS_INTERRUPT_PIN;           // Pin connected to ADS data ready interrupt
 
   // Initialize ADS hardware abstraction layer, and set the sample rate
-  int ret_val = ads_init(&init);
-  if(ret_val)
-  {
-    Serial.println(ret_val);
-  }
-  /*if(ads_init(&init) != ADS_OK)
+  if(ads_init(&init) != ADS_OK)
   {
     Serial.println("One Axis ADS initialization failed");
-  }*/
+  }
 
   // Start reading data!
   ads_run(true);

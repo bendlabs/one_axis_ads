@@ -12,22 +12,6 @@
 
 #define ADS_COUNT				(10)				// Number of ADS devices attached to bus
 
-#define TRINKET 1
-
-#if TRINKET
-// Trinket
-#define ADS_RESET_PIN			(4)					// Pin number attached to ads reset line.
-#define ADS_INTERRUPT_PIN		(3)					// Pin number attached to the ads data ready line. 
-#endif
-
-#ifndef ADS_RESET_PIN
-#define ADS_RESET_PIN			(4)					// Pin number attached to ads reset line.
-#endif
-
-#ifndef ADS_INTERRUPT_PIN
-#define ADS_INTERRUPT_PIN		(3)					// Pin number attached to the ads data ready line. 
-#endif
-
 
 void ads_hal_delay(uint16_t delay_ms);
 
@@ -59,9 +43,12 @@ void ads_hal_reset(void);
 /**
  * @brief Initializes the hardware abstraction layer 
  *
+ * @param callback to ads.cpp, 
+ * @param reset_pin pin number for reset line of ads
+ * @param datardy_pin pin number for data ready interrupt 
  * @return	ADS_OK if successful ADS_ERR_IO if failed
  */
-int ads_hal_init(void (*callback)(uint8_t*));
+int ads_hal_init(void (*callback)(uint8_t*), uint32_t reset_pin, uint32_t datardy_pin);
 
 /**
  * @brief Selects the current device address the driver is communicating with

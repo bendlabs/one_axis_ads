@@ -17,6 +17,9 @@ static uint8_t read_buffer[ADS_TRANSFER_SIZE];
 
 #define ADS_DEFAULT_ADDR		(0x12)			// Default I2C address of the ADS
 
+static uint32_t ADS_RESET_PIN = 0;
+static uint32_t ADS_INTERRUPT_PIN = 0;
+
 
 static uint8_t _address = ADS_DEFAULT_ADDR;
 
@@ -168,8 +171,11 @@ void ads_hal_reset(void)
  *
  * @return	ADS_OK if successful ADS_ERR_IO if failed
  */
-int ads_hal_init(void (*callback)(uint8_t*))
+int ads_hal_init(void (*callback)(uint8_t*), uint32_t reset_pin, uint32_t datardy_pin)
 {
+	ADS_RESET_PIN     = reset_pin;
+	ADS_INTERRUPT_PIN = datardy_pin;
+	
 	// Set callback pointer
 	ads_read_callback = callback;
 	
