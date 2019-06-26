@@ -121,13 +121,14 @@ void setup() {
   init.ads_sample_callback = &ads_data_callback;
   init.reset_pin = ADS_RESET_PIN;                 // Pin connected to ADS reset line
   init.datardy_pin = ADS_INTERRUPT_PIN;           // Pin connected to ADS data ready interrupt
+  init.addr = 0;
 
   delay(100);
 
   if(ads_init(&init) != ADS_OK)
     Serial.println("One Axis ADS initialization failed");
 
-  delay(100);
+  //delay(100);
 }
 
 void startAdv(void)
@@ -185,7 +186,8 @@ void setupANGM(void)
 void connect_callback(uint16_t conn_handle)
 {
     Serial.print("Connected");
-  ads_run(true);
+    ads_polled(true);
+  //ads_run(true);
 }
 
 void disconnect_callback(uint16_t conn_handle, uint8_t reason)
@@ -197,8 +199,9 @@ void disconnect_callback(uint16_t conn_handle, uint8_t reason)
 
   Serial.println("Disconnected");
   Serial.println("Advertising!");
-
-  ads_run(false);
+  
+  ads_polled(false);
+  //ads_run(false);
 }
 
 void write_callback(BLECharacteristic& chr, unsigned char * rx, short unsigned len, short unsigned dah)
@@ -277,8 +280,20 @@ void parse_serial_port(void)
 
 void loop() {
   // put your main code here, to run repeatedly:
+
+  uint8_t read_buffer[3];
+
+  float ang = 0.0f;
+
+  if( ads_hal_read_buffer(read_buffer, 3) == ADS_OK)
+  {
+    int16_t temp = ads_int16_decode(&read_buffer[1]);
+    ang = (float)temp/64.0f;
+    Serial.println(ang);
+  }
   
-  if ( newData ) 
+  
+  //if ( newData ) 
   {
     if(Bluefruit.connected())
     {
@@ -294,8 +309,10 @@ void loop() {
   {
     parse_serial_port();
   } 
+
+  delay(1);
   
-  delay(5);
+  //delay(5);
 }
 
 void rtos_idle_callback(void)
