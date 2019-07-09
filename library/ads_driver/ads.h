@@ -14,7 +14,10 @@
 #include "ads_dfu.h"
 #include "ads_util.h"
 
-#define ADS_DFU_CHECK				(0)		// Set this to 1 to check if the newest firmware is on the ADS
+/* 
+ * If compilation fails due to insufficent memory in Arduino IDE set to (0) 
+ */
+#define ADS_DFU_CHECK				(1)		// Set this to 1 to check if the newest firmware is on the ADS
 
 
 typedef void (*ads_callback)(float*,uint8_t);	// Callback function prototype for interrupt mode
@@ -103,11 +106,10 @@ int ads_enable_interrupt(bool enable);
  *		  is 0x12. Use this function to program an ADS to allow multiple
  *		  devices on the same I2C bus.
  *
- * @param	device	device number of the device that is being updated
  * @param	address	new address of the ADS
- * @return	ADS_OK if successful ADS_ERR_IO or ADS_ERR_BAD_PARAM if failed
+ * @return	ADS_OK if successful ADS_ERR_IO if failed
  */
-int ads_update_device_address(uint8_t device, uint8_t address);
+int ads_update_device_address(uint8_t address);
 
 /**
  * @brief Initializes the hardware abstraction layer and sample rate of the ADS

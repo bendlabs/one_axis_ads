@@ -55,15 +55,15 @@ int ads_read_polled(float * sample, uint8_t * data_type)
 		// Check that read packet is a data packet
 		if(buffer[0] == ADS_SAMPLE)
 		{
-			ads_type[0] = buffer[0];
+			data_type[0] = buffer[0];
 			temp = ads_int16_decode(&buffer[1]);
 			sample[0] = (float)temp/64.0f;
 		}
 		else if(buffer[0] == ADS_STRETCH_SAMPLE)
 		{
-			ads_type[0] = buffer[0];
+			data_type[0] = buffer[0];
 			temp = ads_int16_decode(&buffer[1]);
-			sample[0] = (float)temp/64.0f;
+			sample[1] = (float)temp/64.0f;
 		}
 		else 
 		{
@@ -143,11 +143,10 @@ int ads_set_sample_rate(ADS_SPS_T sps)
  *		  is 0x12. Use this function to program an ADS to allow multiple
  *		  devices on the same I2C bus.
  *
- * @param	device	device number of the device that is being updated
  * @param	address	new address of the ADS
- * @return	ADS_OK if successful ADS_ERR_IO or ADS_ERR_BAD_PARAM if failed
+ * @return	ADS_OK if successful ADS_ERR_IO if failed
  */
-int ads_update_device_address(uint8_t device, uint8_t address)
+int ads_update_device_address(uint8_t address)
 {
 	uint8_t buffer[ADS_TRANSFER_SIZE];
 	
@@ -157,7 +156,9 @@ int ads_update_device_address(uint8_t device, uint8_t address)
 	if(ads_hal_write_buffer(buffer, ADS_TRANSFER_SIZE) != ADS_OK)
 		return ADS_ERR_IO;
 	
-	return ads_hal_update_device_addr(device, address);	
+	ads_hal_set_address(address);
+	
+	return ADS_OK;
 }
 
 /**

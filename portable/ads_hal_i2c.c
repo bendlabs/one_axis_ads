@@ -8,6 +8,7 @@
 
 /* Hardware Specific Includes */
 #include "Arduino.h"
+#include "Wire.h"
 
 static void (*ads_read_callback)(uint8_t *);
 
@@ -29,6 +30,7 @@ volatile bool _ads_int_enabled = false;
 /************************************************************************/
 static inline void ads_hal_gpio_pin_write(uint8_t pin, uint8_t val);
 static void ads_hal_pin_int_init(void);
+static void ads_hal_i2c_init(void);
 
 
 /**
@@ -89,6 +91,16 @@ void ads_hal_pin_int_enable(bool enable)
 	{
 		detachInterrupt(digitalPinToInterrupt(ADS_INTERRUPT_PIN));
 	}
+}
+
+/**
+ * @brief Configure I2C bus, 7 bit address, 400kHz frequency enable clock stretching
+ *			if available.
+ */
+static void ads_hal_i2c_init(void)
+{
+	Wire.begin();
+	Wire.setClock(400000);	
 }
 
 /**
@@ -192,9 +204,8 @@ int ads_hal_init(void (*callback)(uint8_t*), uint32_t reset_pin, uint32_t datard
 	// Configure and enable interrupt pin
 	ads_hal_pin_int_init();
 	
-	// Configure I2C bus, 7 bit address, 400kHz bus frequency
-	Wire.begin();
-	Wire.setClock(400000);
+	// Initialize the I2C bus
+	ads_hal_i2c_init();
 
 	return ADS_OK;
 }
