@@ -62,6 +62,9 @@ void setup() {
     Serial.println("One Axis ADS initialization succeeded...");
   }
 
+  // Enable stretch measurements
+  ads_stretch_en(true);
+
   // Start reading data in polled mode
   ads_polled(true);
 
@@ -71,7 +74,7 @@ void setup() {
 
 void loop() {
 
-  float sample[2];
+  static float sample[2];
   uint8_t data_type;
 
   // Read data from the one axis ads sensor
@@ -100,8 +103,8 @@ void loop() {
     parse_com_port();
   }
 
-  // Delay 10ms to keep 100 Hz sampling rate, Do not increase rate past 500 Hz.
-  delay(10);
+  // Delay 5ms to keep 100 Hz sampling rate between bend and stretch, Do not increase rate past 500 Hz.
+  delay(5);
 }
 
 /* Function parses received characters from the COM port for commands */
