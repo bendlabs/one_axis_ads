@@ -8,15 +8,22 @@
 
 static ads_callback ads_data_callback;
 
+static bool stretch_en = false;
 
 /**
  * @brief Parses sample buffer from one axis ADS. Scales to degrees and
  *				executes callback registered in ads_init. 
- *				This function is called from ads_hal. Application should never call this function.
+ *				This function is called from ads_hal. 
+ *              Application should never call this function.
  */	
-void ads_parse_read_buffer(uint8_t * buffer)
+static void ads_parse_read_buffer(uint8_t * buffer)
 {
 	static float sample[2];
+	
+	if(!stretch_en)
+	{
+		sample[1] = 0.0f;
+	}
 	
 	if(buffer[0] == ADS_SAMPLE)
 	{
@@ -118,6 +125,8 @@ int ads_stretch_en(bool enable)
 		
 	buffer[0] = ADS_READ_STRETCH;
 	buffer[1] = enable;
+	
+	stretch_en = enable;
 		
 	return ads_hal_write_buffer(buffer, ADS_TRANSFER_SIZE);
 }
@@ -180,19 +189,29 @@ int ads_init(ads_init_t * ads_init)
 	
 	// Copy local pointer of callback to user application code 
 	ads_data_callback = ads_init->ads_sample_callback;
-	
-	// Check that the device id matched ADS_ONE_AXIS
-	if(ads_get_dev_id() != ADS_OK)
+
+	// Check that the device type is a one axis
+	ADS_DEV_TYPE_T ads_dev_type;
+	if (ads_get_dev_type(&ads_dev_type) != ADS_OK)
 		return ADS_ERR_DEV_ID;
+
+	switch (ads_dev_type)
+	{
+	case ADS_DEV_ONE_AXIS_V1:
+	case ADS_DEV_ONE_AXIS_V2:
+		break;
+	default:
+		return ADS_ERR_DEV_ID;
+	}
 	
-	/* Checks if the firmware in the driver (ads_fw.h) is newer than the firmware on the ads.
+	/* Checks if the firmware in the driver (ads_fw.h, ads_fw_v2.h) is newer than the firmware on the ads.
 	 * Updates firwmare on the ads if out of date. */
 #if ADS_DFU_CHECK
- 	if(ads_dfu_check((uint8_t)ADS_GET_FW_VER))
+ 	if(ads_dfu_check(ads_dev_type))
 	{
 		ads_dfu_reset();
 		ads_hal_delay(50);		// Give ADS time to reset
-		ads_dfu_update();
+		ads_dfu_update(ads_dev_type);
 		ads_hal_delay(2000);	// Let it reinitialize
 	}
 #endif
@@ -267,6 +286,30 @@ int ads_wake(void)
  */
 int ads_get_dev_id(void)
 {
+	ADS_DEV_TYPE_T device_type;
+	
+	if (ads_get_dev_type(&device_type) == ADS_OK)
+	{
+		switch (device_type)
+		{
+		case ADS_DEV_ONE_AXIS_V1:
+		case ADS_DEV_ONE_AXIS_V2:
+			return ADS_OK;
+		}
+	}
+	
+	return ADS_ERR_DEV_ID;
+}
+
+ /**
+ * @brief Returns the device type in device_type. ADS should not be in free run
+ * 			when this function is called.
+ *
+ * @param device_type  recipient of the device type
+ * @return	ADS_OK if dev_id is one of ADS_DEV_TYPE_T, ADS_ERR_DEV_ID if not
+ */
+int ads_get_dev_type(ADS_DEV_TYPE_T * ads_dev_type)
+{
 	uint8_t buffer[ADS_TRANSFER_SIZE];
 	
 	buffer[0] = ADS_GET_DEV_ID;
@@ -280,14 +323,18 @@ int ads_get_dev_id(void)
 	
 	ads_hal_pin_int_enable(true);
 	
-	/* Check that packet read is a device id packet and that
-	 * and that the device id is a two axis sensor */
-	if(buffer[0] == ADS_DEV_ID && buffer[1] == ADS_ONE_AXIS)
+	if (buffer[0] == ADS_DEV_ID)
 	{
-		return ADS_OK;
+		switch (buffer[1])
+		{
+		case ADS_DEV_ONE_AXIS_V1:
+		case ADS_DEV_ONE_AXIS_V2:
+		case ADS_DEV_TWO_AXIS_V1:
+			*ads_dev_type = (ADS_DEV_TYPE_T)buffer[1];
+			return ADS_OK;
+		}
 	}
-	else
-	{
-		return ADS_ERR_DEV_ID;
-	}
+	
+	*ads_dev_type = ADS_DEV_UNKNOWN;
+	return ADS_ERR_DEV_ID;
 }

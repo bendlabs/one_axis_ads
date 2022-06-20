@@ -15,10 +15,11 @@
 #include "ads_util.h"
 
 /* 
- * If compilation fails due to insufficent memory in Arduino IDE set to (0) 
+ * If compilation fails due to insufficent memory in Arduino IDE set to (0)
+ * Additionally, if updating is desired and you wish to reduce the memory footprint,
+ * static firmware can be device specific. See ads_dfu.h
  */
-#define ADS_DFU_CHECK				(1)		// Set this to 1 to check if the newest firmware is on the ADS
-
+#define ADS_DFU_CHECK      (1) // Set this to 1 to check if the newest firmware is on the ADS
 
 typedef void (*ads_callback)(float*,uint8_t);	// Callback function prototype for interrupt mode
 
@@ -42,15 +43,19 @@ typedef enum {
 	ADS_500_HZ = 32,					// 500 samples per second, Interrupt Mode, max rate
 } ADS_SPS_T;
 
+/* Device ids */
+typedef enum {
+	ADS_ONE_AXIS = 1,
+	ADS_TWO_AXIS = 2
+} ADS_DEV_IDS_T;
 
 typedef struct {
 	ADS_SPS_T sps;						// Sample rate for interrupt mode
 	ads_callback ads_sample_callback;	// Pointer to callback function
-	uint32_t reset_pin;					// Pin number connected to ADS reset line
+	uint32_t reset_pin; 				// Pin number connected to ADS reset line
 	uint32_t datardy_pin;				// Pin number connected to ADS interrupt line
 	uint8_t addr;						// I2C 7-bit address of ADS sensor
 } ads_init_t;
-
 
 /**
  * @brief Reads ADS sample data when ADS is in polled mode
@@ -151,6 +156,15 @@ int ads_wake(void);
  * @return	ADS_OK if dev_id is ADS_ONE_AXIS, ADS_ERR_DEV_ID if not
  */
  int ads_get_dev_id(void);
+ 
+ /**
+ * @brief Returns the device type in ads_dev_type. ADS should not be in free run
+ * 			when this function is called.
+ *
+ * @param ads_dev_type  recipient of the device type
+ * @return	ADS_OK if dev_id is one of ADS_DEV_TYPE_T, ADS_ERR_DEV_ID if not
+ */
+ int ads_get_dev_type(ADS_DEV_TYPE_T * ads_dev_type);
 
 
 #endif /* ADS_H_ */
