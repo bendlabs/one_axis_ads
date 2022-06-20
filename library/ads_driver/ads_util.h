@@ -28,11 +28,13 @@ typedef enum {
 	ADS_STRETCH_SAMPLE		// Packet read is a stretch sample
 } ADS_PACKET_T;
 
-/* Device IDS */
+/* Device type */
 typedef enum {
-	ADS_ONE_AXIS = 1,		// Device ID for the one axis ADS
-	ADS_TWO_AXIS = 2,		// Device ID for the two axis ADS
-} ADS_DEV_IDS_T;
+	ADS_DEV_UNKNOWN     = 0,
+	ADS_DEV_ONE_AXIS_V1 = 1,
+	ADS_DEV_TWO_AXIS_V1 = 2,
+	ADS_DEV_ONE_AXIS_V2 = 12
+} ADS_DEV_TYPE_T;
 
 /**@brief Function for decoding a int16 value.
  *
