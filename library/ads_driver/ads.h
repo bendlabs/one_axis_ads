@@ -11,15 +11,7 @@
 #include <stdbool.h>
 #include "ads_hal.h"
 #include "ads_err.h"
-#include "ads_dfu.h"
 #include "ads_util.h"
-
-/* 
- * If compilation fails due to insufficent memory in Arduino IDE set to (0)
- * Additionally, if updating is desired and you wish to reduce the memory footprint,
- * static firmware can be device specific. See ads_dfu.h
- */
-#define ADS_DFU_CHECK      (1) // Set this to 1 to check if the newest firmware is on the ADS
 
 typedef void (*ads_callback)(float*,uint8_t);	// Callback function prototype for interrupt mode
 

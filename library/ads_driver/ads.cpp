@@ -204,18 +204,6 @@ int ads_init(ads_init_t * ads_init)
 		return ADS_ERR_DEV_ID;
 	}
 	
-	/* Checks if the firmware in the driver (ads_fw.h, ads_fw_v2.h) is newer than the firmware on the ads.
-	 * Updates firwmare on the ads if out of date. */
-#if ADS_DFU_CHECK
- 	if(ads_dfu_check(ads_dev_type))
-	{
-		ads_dfu_reset();
-		ads_hal_delay(50);		// Give ADS time to reset
-		ads_dfu_update(ads_dev_type);
-		ads_hal_delay(2000);	// Let it reinitialize
-	}
-#endif
-	
 	ads_hal_delay(2);
  	
 	// Set the sample rate for interrupt mode 

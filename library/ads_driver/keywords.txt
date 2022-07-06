@@ -22,6 +22,7 @@ ads_shutdown				KEYWORD2
 ads_wake					KEYWORD2
 ads_get_dev_id				KEYWORD2
 ads_stretch_en				KEYWORD2
+ads_get_dev_type            KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
