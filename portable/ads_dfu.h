@@ -68,9 +68,6 @@ int ads_dfu_reset(void);
 int ads_dfu_update(ADS_DEV_TYPE_T ads_dev_type);
 
 
-
-
-
 /**
  * @brief Reads acknowledgment byte from the ADS bootloader
  *			(internal function).
@@ -154,21 +151,26 @@ inline int ads_dfu_reset(void)
 inline int ads_dfu_update(ADS_DEV_TYPE_T ads_dev_type)
 {
 	const uint8_t * fw = NULL;
+	uint32_t len = 0;
 	
 #if ADS_FW_INCLUDE_ADS1_V1 == 1
 	if (ads_dev_type == ADS_DEV_ONE_AXIS_V1)
+	{
 		fw = ads_fw;
+		len = sizeof(ads_fw);
+	}
 #endif
 	
 #if ADS_FW_INCLUDE_ADS1_V2 == 1
 	if (ads_dev_type == ADS_DEV_ONE_AXIS_V2)
+	{
 		fw = ads_fw_v2;
+		len = sizeof(ads_fw_v2);
+	}
 #endif
 
-	if (fw == NULL)
+	if (fw == NULL || len == 0)
 		return ADS_ERR_DEV_ID;
-		
-	uint32_t len = sizeof(fw);
 	
 	uint8_t page_size = 64;
 	uint8_t block_len = page_size;
