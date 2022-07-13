@@ -44,6 +44,10 @@ void ads_data_callback(float * sample, uint8_t sample_type)
 
 void setup() {
   Serial.begin(115200);
+  Serial.println("Press/send any key to update firmware...");
+
+  while(!Serial.available());
+  Serial.read();
 
   Serial.println("Initializing One Axis sensor");
 
@@ -89,10 +93,19 @@ void setup() {
   
   ads_dfu_reset();
   ads_hal_delay(50); // Give ADS time to reset
-  ads_dfu_update(dev_type);
+  
+  ret_val = ads_dfu_update(dev_type);
   ads_hal_delay(2000); // Let it reinitialize
 
-  Serial.println("Update complete.");
+  if (ret_val)
+  {
+    Serial.print("Failed up with reason: ");
+    Serial.println(ret_val);
+  }
+  else
+  {
+    Serial.println("Update complete.");
+  }
 }
 
 void loop() {
