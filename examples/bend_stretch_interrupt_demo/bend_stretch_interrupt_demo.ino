@@ -1,9 +1,9 @@
 /* 
- *  Reading the one axis soft flex sensor from Bend Labs
- *  By: Colton Ottley @ Bend Labs
+ *  Reading the one axis soft flex sensor from Nitto Bend Technologies
+ *  By: Colton Ottley @ Nitto Bend Technologies
  *  Date: June 18th, 2019
  *  
- *  This sktech configures the one axis soft flex sensor from Bendlabs
+ *  This sktech configures the one axis soft flex sensor from Nitto Bend Technologies
  *  to simultaneously supply bend (angular displacement) and stretch
  *  (linear displacement) data via an interrupt driven callback.
  *  
