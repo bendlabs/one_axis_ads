@@ -1,7 +1,7 @@
 /* 
  *  Updating the I2C address on the one axis soft flex sensor 
- *  from Bend Labs
- *  By: Colton Ottley @ Bend Labs
+ *  from Nitto Bend Technologies
+ *  By: Colton Ottley @ Nitto Bend Technologies
  *  Date: June 19th, 2019
  *  
  *  Updates the I2C address on the one axis sensor from current address stored 

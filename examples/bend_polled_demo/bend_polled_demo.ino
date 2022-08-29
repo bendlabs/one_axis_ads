@@ -1,9 +1,10 @@
 /* 
- *  Reading the one axis soft flex sensor from Bend Labs in polled mode
- *  By: Colton Ottley @ Bend Labs
+ *  Reading the one axis soft flex sensor from Nitto Bend Technologies in 
+ *  polled mode
+ *  By: Colton Ottley @ Nitto Bend Technologies
  *  Date: June 18th, 2019
  *  
- *  This sktech configures the one axis soft flex sensor from Bendlabs
+ *  This sktech configures the one axis soft flex sensor from Nitto Bend Technologies
  *  to supply bend (angular displacement) data via a polling setup.
  *  
  *  When reading data from the sensor in polled mode, instead of interrupt mode,
@@ -22,7 +23,7 @@
 #include "ads.h"
 
 #define ADS_RESET_PIN      (3)           // Pin number attached to ads reset line.
-#define ADS_INTERRUPT_PIN  (4)           // Not needed in interrupt mode.  
+#define ADS_INTERRUPT_PIN  (4)           // Not needed in polled mode.  
 
 void ads_data_callback(float * sample);
 void deadzone_filter(float * sample);
@@ -74,7 +75,7 @@ void loop() {
   uint8_t data_type;
 
   // Read data from the one axis ads sensor
-  int ret_val = ads_read_polled(&sample, &data_type);
+  int ret_val = ads_read_polled(sample, &data_type);
 
   // Check if read was successfull
   if(ret_val == ADS_OK)
