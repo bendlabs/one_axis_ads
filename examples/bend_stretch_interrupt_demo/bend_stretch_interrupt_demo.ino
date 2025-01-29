@@ -1,17 +1,17 @@
 /* 
- *  Reading the one axis soft flex sensor from Nitto Bend Technologies
- *  By: Colton Ottley @ Nitto Bend Technologies
- *  Date: June 18th, 2019
+ * Reading the one axis soft flex sensor from Nitto Bend Technologies
+ * By: Colton Ottley @ Nitto Bend Technologies
+ * Date: June 18th, 2019
+ * Edited by : Nick Rudh @ Nitto Bend Technologies
+ * Date: 1/15/2025
  *  
- *  This sktech configures the one axis soft flex sensor from Nitto Bend Technologies
- *  to simultaneously supply bend (angular displacement) and stretch
- *  (linear displacement) data via an interrupt driven callback.
- *  
- *  FUNCTIONALITY ADDED IN FW VERSION 44 TO MEASURE STRETCH
- *  
- *  Sensor is not 5V tolerant use only with 3.3V boards
- *  
- *  Refer to one_axis_quick_start_guide.pdf for wiring instructions
+ * This software is provided "as is", without any warranty of any kind, express or implied,
+ * including but not limited to the warranties of merchantability, fitness for a particular purpose,
+ * and noninfringement. In no event shall the authors or copyright holders be liable for any claim,
+ * damages, or other liability, whether in an action of contract, tort, or otherwise, arising from,
+ * out of, or in connection with the software or the use or other dealings in the software.
+ * 
+ * Refer to one_axis_quick_start_guide.pdf for wiring instructions
  */
 #if defined(ARDUINO_SAMD_ZERO) && defined(SERIAL_PORT_USBVIRTUAL)
   // Required for Serial on Zero based boards

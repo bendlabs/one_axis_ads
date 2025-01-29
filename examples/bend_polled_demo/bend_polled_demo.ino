@@ -1,22 +1,18 @@
 /* 
- *  Reading the one axis soft flex sensor from Nitto Bend Technologies in 
- *  polled mode
- *  By: Colton Ottley @ Nitto Bend Technologies
- *  Date: June 18th, 2019
+ * Reading the one axis soft flex sensor from Nitto Bend Technologies in 
+ * polled mode
+ * By: Colton Ottley @ Nitto Bend Technologies
+ * Date: June 18th, 2019
+ * Edited by : Nick Rudh @ Nitto Bend Technologies
+ * Date: 1/15/2025
  *  
- *  This sktech configures the one axis soft flex sensor from Nitto Bend Technologies
- *  to supply bend (angular displacement) data via a polling setup.
- *  
- *  When reading data from the sensor in polled mode, instead of interrupt mode,
- *  each sample read triggers the sensor to take another sample and go back to 
- *  sleep. This results in a one sample interval delay between the sampling of
- *  the sensor position and the data that is read out. 
- *  
- *  Minimum sample interval is 2ms (500 Hz sample rate)
- *  
- *  Sensor is not 5V tolerant use only with 3.3V boards
- *  
- *  Refer to one_axis_quick_start_guide.pdf for wiring instructions
+ * This software is provided "as is", without any warranty of any kind, express or implied,
+ * including but not limited to the warranties of merchantability, fitness for a particular purpose,
+ * and noninfringement. In no event shall the authors or copyright holders be liable for any claim,
+ * damages, or other liability, whether in an action of contract, tort, or otherwise, arising from,
+ * out of, or in connection with the software or the use or other dealings in the software.
+ * 
+ * Refer to one_axis_quick_start_guide.pdf for wiring instructions
  */
 
 #include "Arduino.h"

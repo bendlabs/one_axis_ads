@@ -1,19 +1,17 @@
 /* 
- *  Updating the one axis soft flex sensor from Bend Labs firmware
- *  By: Don Saxby @ Nitto Bend Technologies
- *  Date: July 6th, 2022
+ * Updating the one axis soft flex sensor from Bend Labs firmware
+ * By: Don Saxby @ Nitto Bend Technologies
+ * Date: July 6th, 2022
+ * Edited by : Nick Rudh @ Nitto Bend Technologies
+ * Date: 1/15/2025
  *  
- *  This sktech configures the one axis soft flex sensor from Bendlabs
- *  and updates sensor firmware if out of date.
- *  
- *  The firmware update image is include is source code. It is advised to
- *  run this sketch on device that has sufficient memory.
- *  
- *  Minimum sample interval is 2ms (500 Hz sample rate)
- *  
- *  Sensor is not 5V tolerant use only with 3.3V boards
- *  
- *  Refer to one_axis_quick_start_guide.pdf for wiring instructions
+ * This software is provided "as is", without any warranty of any kind, express or implied,
+ * including but not limited to the warranties of merchantability, fitness for a particular purpose,
+ * and noninfringement. In no event shall the authors or copyright holders be liable for any claim,
+ * damages, or other liability, whether in an action of contract, tort, or otherwise, arising from,
+ * out of, or in connection with the software or the use or other dealings in the software.
+ * 
+ * Refer to one_axis_quick_start_guide.pdf for wiring instructions
  */
 
 #include "Arduino.h"
